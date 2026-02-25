@@ -390,16 +390,57 @@
   /* ── CHART ── */
   .chart-wrap {
     background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 22px; margin-bottom: 24px;
+    border-radius: 12px; padding: 22px 24px; margin-bottom: 24px;
     box-shadow: var(--shadow);
   }
-  .chart-title { font-family: 'Nunito', sans-serif; font-size: 1.1rem; color: var(--blue); margin-bottom: 16px; }
-  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 120px; }
-  .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
-  .bar { width: 100%; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, var(--blue-light), var(--blue)); min-height: 3px; transition: height 0.4s ease; }
-  .bar.loan-bar { background: linear-gradient(180deg, var(--red-light), var(--red)); }
-  .bar-label { font-size: 0.58rem; color: var(--muted); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
-  .bar-val { font-size: 0.6rem; color: var(--blue); font-weight: 500; }
+  .chart-title {
+    font-size: 0.72rem; font-weight: 600; color: var(--muted);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px;
+  }
+  .hbar-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 12px; min-width: 0;
+  }
+  .hbar-row:last-child { margin-bottom: 0; }
+  .hbar-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--blue-pale); display: flex; align-items: center;
+    justify-content: center; font-size: 1rem; flex-shrink: 0;
+  }
+  .hbar-label {
+    width: 110px; flex-shrink: 0;
+    font-size: 0.82rem; font-weight: 500; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .hbar-track {
+    flex: 1; height: 22px; background: var(--blue-pale);
+    border-radius: 6px; overflow: hidden; min-width: 0;
+  }
+  .hbar-fill {
+    height: 100%; border-radius: 6px;
+    background: linear-gradient(90deg, var(--blue), var(--blue-light));
+    transition: width 0.5s ease;
+    display: flex; align-items: center; justify-content: flex-end; padding-right: 8px;
+    min-width: 4px;
+  }
+  .hbar-fill.loan { background: linear-gradient(90deg, var(--red), var(--red-light)); }
+  .hbar-fill-label {
+    font-size: 0.68rem; font-weight: 600; color: white; white-space: nowrap;
+  }
+  .hbar-amount {
+    width: 72px; flex-shrink: 0; text-align: right;
+    font-size: 0.88rem; font-weight: 700; color: var(--blue);
+  }
+  .hbar-pct {
+    width: 36px; flex-shrink: 0; text-align: right;
+    font-size: 0.72rem; color: var(--muted);
+  }
+  @media (max-width: 640px) {
+    .hbar-label { width: 80px; font-size: 0.75rem; }
+    .hbar-amount { width: 58px; font-size: 0.8rem; }
+    .hbar-pct { display: none; }
+    .hbar-icon { display: none; }
+  }
 
   /* ── TABS ── */
   .tab-content { display: none; }
@@ -801,9 +842,13 @@
     <div class="sum-item"><div class="sum-label">Total / Year</div><div class="sum-value" id="ms-year">—</div></div>
     <div class="sum-item"><div class="sum-label">Biggest Item</div><div class="sum-value" id="ms-biggest">—</div></div>
   </div>
-  <div id="monthly-chart-wrap" class="chart-wrap" style="display:none">
+  <div class="chart-wrap" id="monthly-chart-wrap" style="display:none">
     <div class="chart-title">Monthly Breakdown</div>
-    <div class="bar-chart" id="monthly-chart"></div>
+    <div id="monthly-chart"></div>
+    <div style="border-top:2px solid var(--border);margin-top:16px;padding-top:14px;display:flex;justify-content:space-between;align-items:center" id="monthly-total-row">
+      <span style="font-size:0.78rem;font-weight:600;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase">Total / month</span>
+      <span style="font-size:1.4rem;font-weight:700;color:var(--blue)" id="monthly-total-display">—</span>
+    </div>
   </div>
   <div class="expense-list" id="monthly-list"></div>
   <div id="monthly-empty" class="empty-state">
@@ -861,7 +906,7 @@
 
   <div class="chart-wrap" id="ov-chart-wrap" style="display:none">
     <div class="chart-title">All Monthly Costs</div>
-    <div class="bar-chart" id="overview-chart"></div>
+    <div id="overview-chart"></div>
   </div>
   <div class="expense-list" id="overview-list"></div>
 </div>
@@ -1549,12 +1594,28 @@ function renderMonthly() {
   document.getElementById('ms-total').textContent = fmt(Math.round(totalMonthly));
   document.getElementById('ms-year').textContent = fmt(Math.round(totalMonthly*12));
   document.getElementById('ms-biggest').textContent = biggest.name;
+  document.getElementById('monthly-total-display').textContent = fmt(Math.round(totalMonthly));
   const maxAmt = Math.max(...items.map(i=>toMonthly(i.amount||0,i.freq)));
-  document.getElementById('monthly-chart').innerHTML = items.map(i=>{
-    const m = toMonthly(i.amount||0,i.freq);
-    const pct = maxAmt?(m/maxAmt*100):0;
-    return `<div class="bar-item"><div class="bar-val">${fmt(Math.round(m))}</div><div class="bar" style="height:${pct}%"></div><div class="bar-label">${i.name.slice(0,9)}</div></div>`;
-  }).join('');
+  const totalAmt = items.reduce((s,i)=>s+toMonthly(i.amount||0,i.freq),0);
+  document.getElementById('monthly-chart').innerHTML = items
+    .slice().sort((a,b)=>toMonthly(b.amount||0,b.freq)-toMonthly(a.amount||0,a.freq))
+    .map(i=>{
+      const m = toMonthly(i.amount||0,i.freq);
+      const widthPct = maxAmt?(m/maxAmt*100):0;
+      const sharePct = totalAmt?(m/totalAmt*100).toFixed(0):0;
+      const showLabel = widthPct > 18;
+      return `<div class="hbar-row">
+        <div class="hbar-icon">${ICONS[i.cat]||'📋'}</div>
+        <div class="hbar-label" title="${i.name}">${i.name}</div>
+        <div class="hbar-track">
+          <div class="hbar-fill" style="width:${widthPct.toFixed(1)}%">
+            ${showLabel?`<span class="hbar-fill-label">${sharePct}%</span>`:''}
+          </div>
+        </div>
+        <div class="hbar-amount">${fmt(Math.round(m))}</div>
+        <div class="hbar-pct">${sharePct}%</div>
+      </div>`;
+    }).join('');
   container.innerHTML = items.map(item=>`
     <div class="expense-item">
       <div class="expense-icon">${ICONS[item.cat]||'📋'}</div>
@@ -1692,28 +1753,30 @@ function renderOverview() {
   if (!allItems.length) { document.getElementById('ov-chart-wrap').style.display='none'; document.getElementById('overview-list').innerHTML=''; return; }
   document.getElementById('ov-chart-wrap').style.display='';
   const maxAmt = Math.max(...allItems.map(i=>toMonthly(i.amount||0,i.freq)));
-  document.getElementById('overview-chart').innerHTML = allItems.map(i=>{
-    const m = toMonthly(i.amount||0,i.freq);
-    const pct = maxAmt?(m/maxAmt*100):0;
-    return `<div class="bar-item"><div class="bar-val" style="font-size:0.6rem">${fmt(Math.round(m))}</div><div class="bar ${i.isLoan?'loan-bar':''}" style="height:${pct}%"></div><div class="bar-label">${i.name.slice(0,9)}</div></div>`;
-  }).join('');
-  document.getElementById('overview-list').innerHTML = `<div class="loan-card">
-    <h3>Monthly Breakdown</h3>
-    ${allItems.map(i=>{
-      const m=Math.round(toMonthly(i.amount||0,i.freq));
-      const pct=grandTotal?(m/grandTotal*100).toFixed(0):0;
-      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)">
-        <span style="display:flex;align-items:center;gap:8px">${ICONS[i.cat]||'📋'} <span style="font-size:0.9rem">${i.name}</span></span>
-        <span style="display:flex;align-items:center;gap:14px">
-          <span style="font-size:0.7rem;color:var(--muted)">${pct}%</span>
-          <span style="font-family:'Nunito',sans-serif;font-size:1.1rem;color:var(--blue2)">${fmt(m)}</span>
-        </span>
+  document.getElementById('overview-chart').innerHTML = allItems
+    .slice().sort((a,b)=>toMonthly(b.amount||0,b.freq)-toMonthly(a.amount||0,a.freq))
+    .map(i=>{
+      const m = toMonthly(i.amount||0,i.freq);
+      const widthPct = maxAmt?(m/maxAmt*100):0;
+      const sharePct = grandTotal?(m/grandTotal*100).toFixed(0):0;
+      const showLabel = widthPct > 18;
+      return `<div class="hbar-row">
+        <div class="hbar-icon">${ICONS[i.cat]||'📋'}</div>
+        <div class="hbar-label" title="${i.name}">${i.name}</div>
+        <div class="hbar-track">
+          <div class="hbar-fill${i.isLoan?' loan':''}" style="width:${widthPct.toFixed(1)}%">
+            ${showLabel?`<span class="hbar-fill-label">${sharePct}%</span>`:''}
+          </div>
+        </div>
+        <div class="hbar-amount">${fmt(Math.round(m))}</div>
+        <div class="hbar-pct">${sharePct}%</div>
       </div>`;
-    }).join('')}
-    <div style="display:flex;justify-content:space-between;padding:14px 0 0;font-family:'Nunito',sans-serif;font-size:1.4rem;color:var(--blue)">
-      <span>Total / month</span><span style="color:var(--red)">${fmt(Math.round(grandTotal))}</span>
-    </div>
-  </div>`;
+    }).join('')
+    + `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:2px solid var(--border)">
+        <span style="font-size:0.78rem;font-weight:600;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase">Total / month</span>
+        <span style="font-size:1.4rem;font-weight:700;color:var(--red)">${fmt(Math.round(grandTotal))}</span>
+      </div>`;
+  document.getElementById('overview-list').innerHTML = '';
 }
 
 // ═══════════════════════════════════════════════════════════
