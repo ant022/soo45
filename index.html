@@ -806,13 +806,48 @@
   <div class="section-header">
     <div class="section-title">Financial Overview<small>The full picture</small></div>
   </div>
-  <div class="summary-bar">
-    <div class="sum-item"><div class="sum-label">Monthly (excl. loan)</div><div class="sum-value gold" id="ov-monthly">—</div></div>
+
+  <!-- INCOME SECTION -->
+  <div class="loan-card" style="margin-bottom:20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+      <h3 style="margin:0;border:none;padding:0;font-family:Cormorant Garamond,serif;font-size:1.3rem;color:var(--blue)">💰 Monthly Income</h3>
+      <button class="btn-small btn-edit edit-only" onclick="openModal('income')">Edit</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px" id="income-display">
+      <div class="loan-stat"><div class="l-label">Your Salary</div><div class="l-val" id="inc-mine">—</div></div>
+      <div class="loan-stat"><div class="l-label">Partner's Salary</div><div class="l-val" id="inc-partner">—</div></div>
+      <div class="loan-stat"><div class="l-label">Combined Net</div><div class="l-val" id="inc-total" style="color:var(--green)">—</div></div>
+    </div>
+    <div id="income-empty-hint" style="font-size:0.82rem;color:var(--muted);margin-top:8px;display:none">
+      Unlock edit mode to enter your salaries and see how your budget holds up.
+    </div>
+  </div>
+
+  <!-- BUDGET HEALTH -->
+  <div id="budget-health" style="display:none;margin-bottom:20px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px">
+      <div class="sum-item"><div class="sum-label">Total Income</div><div class="sum-value green" id="bh-income">—</div></div>
+      <div class="sum-item"><div class="sum-label">Total Expenses</div><div class="sum-value red" id="bh-expenses">—</div></div>
+      <div class="sum-item"><div class="sum-label">Left After Fixed Costs</div><div class="sum-value" id="bh-leftover">—</div></div>
+      <div class="sum-item"><div class="sum-label">Expenses / Income</div><div class="sum-value" id="bh-pct">—</div></div>
+    </div>
+    <!-- HEALTH BAR -->
+    <div class="loan-card" style="margin-bottom:0">
+      <div style="font-size:0.75rem;font-weight:500;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px">Budget Allocation</div>
+      <div id="budget-bar-wrap" style="height:28px;border-radius:8px;overflow:hidden;display:flex;margin-bottom:10px"></div>
+      <div id="budget-bar-legend" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px"></div>
+    </div>
+  </div>
+
+  <!-- EXISTING SUMMARY -->
+  <div class="summary-bar" style="margin-bottom:20px">
+    <div class="sum-item"><div class="sum-label">Monthly Expenses</div><div class="sum-value gold" id="ov-monthly">—</div></div>
     <div class="sum-item"><div class="sum-label">Loan Payment</div><div class="sum-value" id="ov-loan">—</div></div>
     <div class="sum-item"><div class="sum-label">Total Monthly</div><div class="sum-value gold" id="ov-total">—</div></div>
     <div class="sum-item"><div class="sum-label">One-off Total</div><div class="sum-value" id="ov-oneoff">—</div></div>
     <div class="sum-item"><div class="sum-label">Preferred Kitchen</div><div class="sum-value gold" id="ov-kitchen">—</div></div>
   </div>
+
   <div class="chart-wrap" id="ov-chart-wrap" style="display:none">
     <div class="chart-title">All Monthly Costs</div>
     <div class="bar-chart" id="overview-chart"></div>
@@ -821,6 +856,32 @@
 </div>
 
 </main>
+
+<!-- INCOME MODAL -->
+<div class="modal-overlay" id="modal-income">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('income')">✕</button>
+    <h2>Monthly Income</h2>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:18px">Enter net (after tax) monthly amounts.</p>
+    <div class="form-group">
+      <label>Your Name</label>
+      <input type="text" id="inc-name1" placeholder="e.g. Ant">
+    </div>
+    <div class="form-group">
+      <label>Your Monthly Net Salary (€)</label>
+      <input type="number" id="inc-sal1" placeholder="3500">
+    </div>
+    <div class="form-group">
+      <label>Partner's Name</label>
+      <input type="text" id="inc-name2" placeholder="e.g. Laura">
+    </div>
+    <div class="form-group">
+      <label>Partner's Monthly Net Salary (€)</label>
+      <input type="number" id="inc-sal2" placeholder="2800">
+    </div>
+    <button class="btn-primary" onclick="saveIncome()">Save Income</button>
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════════════════════
@@ -874,7 +935,7 @@ const sb = {
 // ═══════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════
-let state = { kitchens: [], oneoffs: [], monthly: [], loan: null };
+let state = { kitchens: [], oneoffs: [], monthly: [], loan: null, income: null };
 let editMode = false;
 
 // ═══════════════════════════════════════════════════════════
@@ -924,16 +985,18 @@ function saveSetup() {
 async function init() {
   setDbStatus('', 'Connecting…');
   try {
-    const [kitchens, oneoffs, monthly, loanArr] = await Promise.all([
+    const [kitchens, oneoffs, monthly, loanArr, incomeArr] = await Promise.all([
       sb.query('kitchens', { order: 'created_at.asc' }),
       sb.query('oneoffs', { order: 'created_at.asc' }),
       sb.query('monthly', { order: 'created_at.asc' }),
-      sb.query('loan', { order: 'created_at.desc' })
+      sb.query('loan', { order: 'created_at.desc' }),
+      sb.query('income', { order: 'created_at.desc' })
     ]);
     state.kitchens = kitchens;
     state.oneoffs = oneoffs;
     state.monthly = monthly;
     state.loan = loanArr && loanArr.length ? loanArr[0] : null;
+    state.income = incomeArr && incomeArr.length ? incomeArr[0] : null;
     setDbStatus('connected', 'Connected');
     renderAll();
   } catch(e) {
@@ -1006,6 +1069,7 @@ function openModal(type, id) {
   if (type === 'kitchen') document.getElementById('kitchen-modal-title').textContent = id ? 'Edit Kitchen Company' : 'Add Kitchen Company';
   if (type === 'oneoff') document.getElementById('oneoff-modal-title').textContent = id ? 'Edit Cost' : 'Add One-off Cost';
   if (type === 'monthly') document.getElementById('monthly-modal-title').textContent = id ? 'Edit Expense' : 'Add Monthly Expense';
+  if (type === 'income') populateIncomeModal();
   document.getElementById('modal-' + type).classList.add('open');
   setTimeout(() => { const first = document.querySelector(`#modal-${type} input:not([type=hidden])`); first && first.focus(); }, 100);
 }
@@ -1352,6 +1416,57 @@ function renderMonthly() {
 }
 
 // ═══════════════════════════════════════════════════════════
+// INCOME
+// ═══════════════════════════════════════════════════════════
+async function saveIncome() {
+  const item = {
+    id: state.income ? state.income.id : uid(),
+    name1: document.getElementById('inc-name1').value.trim() || 'You',
+    sal1: parseFloat(document.getElementById('inc-sal1').value) || null,
+    name2: document.getElementById('inc-name2').value.trim() || 'Partner',
+    sal2: parseFloat(document.getElementById('inc-sal2').value) || null,
+  };
+  setDbStatus('saving','Saving…');
+  try {
+    await sb.upsert('income', item);
+    state.income = item;
+    setDbStatus('connected','Saved ✓');
+    closeModal('income');
+    renderOverview();
+    toast('Income saved');
+  } catch(e) { setDbStatus('error','Save failed'); toast('⚠️ Save failed'); console.error(e); }
+}
+
+function renderIncomeSection() {
+  const inc = state.income;
+  if (!inc) {
+    document.getElementById('inc-mine').textContent = '—';
+    document.getElementById('inc-partner').textContent = '—';
+    document.getElementById('inc-total').textContent = '—';
+    document.getElementById('income-empty-hint').style.display = editMode ? '' : 'block';
+    return;
+  }
+  document.getElementById('income-empty-hint').style.display = 'none';
+  // Update labels dynamically with names
+  const labels = document.querySelectorAll('#income-display .l-label');
+  if (labels[0]) labels[0].textContent = (inc.name1 || 'You') + "'s Salary";
+  if (labels[1]) labels[1].textContent = (inc.name2 || 'Partner') + "'s Salary";
+  document.getElementById('inc-mine').textContent = fmt(inc.sal1);
+  document.getElementById('inc-partner').textContent = fmt(inc.sal2);
+  const total = (inc.sal1||0) + (inc.sal2||0);
+  document.getElementById('inc-total').textContent = total ? fmt(total) : '—';
+}
+
+function populateIncomeModal() {
+  const inc = state.income;
+  if (!inc) return;
+  document.getElementById('inc-name1').value = inc.name1 || '';
+  document.getElementById('inc-sal1').value = inc.sal1 || '';
+  document.getElementById('inc-name2').value = inc.name2 || '';
+  document.getElementById('inc-sal2').value = inc.sal2 || '';
+}
+
+// ═══════════════════════════════════════════════════════════
 // OVERVIEW
 // ═══════════════════════════════════════════════════════════
 function renderOverview() {
@@ -1359,15 +1474,63 @@ function renderOverview() {
   const oneoffs = state.oneoffs;
   const loan = state.loan;
   const kitchens = state.kitchens;
+  const inc = state.income;
+
   const totalMonthly = monthly.reduce((s,i)=>s+toMonthly(i.amount||0,i.freq),0);
   const totalOneoff = oneoffs.reduce((s,i)=>s+(i.actual||i.budget||0),0);
   const fav = kitchens.find(k=>k.favorite)||kitchens[0];
-  const loanMonthly = loan&&loan.monthly?loan.monthly:0;
+  const loanMonthly = loan&&loan.monthly ? loan.monthly : 0;
+  const grandTotal = totalMonthly + loanMonthly;
+
+  // summary bar
   document.getElementById('ov-monthly').textContent = fmt(Math.round(totalMonthly));
   document.getElementById('ov-loan').textContent = loanMonthly ? fmt(loanMonthly)+'/mo' : '—';
-  document.getElementById('ov-total').textContent = fmt(Math.round(totalMonthly+loanMonthly));
+  document.getElementById('ov-total').textContent = fmt(Math.round(grandTotal));
   document.getElementById('ov-oneoff').textContent = fmt(totalOneoff);
-  document.getElementById('ov-kitchen').textContent = fav?fav.name:'—';
+  document.getElementById('ov-kitchen').textContent = fav ? fav.name : '—';
+
+  // income section
+  renderIncomeSection();
+
+  // budget health
+  const totalIncome = inc ? (inc.sal1||0) + (inc.sal2||0) : 0;
+  const healthEl = document.getElementById('budget-health');
+  if (totalIncome > 0 && grandTotal > 0) {
+    healthEl.style.display = '';
+    const leftover = totalIncome - grandTotal;
+    const pct = Math.round(grandTotal / totalIncome * 100);
+    document.getElementById('bh-income').textContent = fmt(Math.round(totalIncome));
+    document.getElementById('bh-expenses').textContent = fmt(Math.round(grandTotal));
+    const leftEl = document.getElementById('bh-leftover');
+    leftEl.textContent = fmt(Math.round(leftover));
+    leftEl.className = 'sum-value ' + (leftover >= 0 ? 'green' : 'red');
+    document.getElementById('bh-pct').textContent = pct + '%';
+
+    // stacked bar: loan | monthly | leftover
+    const loanPct = totalIncome ? (loanMonthly / totalIncome * 100) : 0;
+    const monthlyPct = totalIncome ? (totalMonthly / totalIncome * 100) : 0;
+    const leftPct = Math.max(0, 100 - loanPct - monthlyPct);
+    const segments = [
+      { label: loan ? (loan.name||'Loan') : 'Loan', pct: loanPct, color: '#c0392b' },
+      { label: 'Monthly expenses', pct: monthlyPct, color: '#1a3a6b' },
+      { label: 'Left over', pct: leftPct, color: leftover >= 0 ? '#1a7a4a' : '#e74c3c' },
+    ].filter(s => s.pct > 0);
+    document.getElementById('budget-bar-wrap').innerHTML = segments.map(s =>
+      `<div style="width:${s.pct.toFixed(1)}%;background:${s.color};transition:width 0.5s;display:flex;align-items:center;justify-content:center">
+        ${s.pct > 8 ? `<span style="font-size:0.65rem;color:white;font-weight:500;white-space:nowrap">${s.pct.toFixed(0)}%</span>` : ''}
+      </div>`
+    ).join('');
+    document.getElementById('budget-bar-legend').innerHTML = segments.map(s =>
+      `<div style="display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--muted)">
+        <div style="width:10px;height:10px;border-radius:2px;background:${s.color};flex-shrink:0"></div>
+        ${s.label}
+      </div>`
+    ).join('');
+  } else {
+    healthEl.style.display = 'none';
+  }
+
+  // chart & breakdown
   const allItems = [...monthly.map(i=>({...i,isLoan:false}))];
   if (loan&&loan.monthly) allItems.push({name:loan.name||'Loan',cat:'loan',amount:loan.monthly,freq:'monthly',isLoan:true});
   if (!allItems.length) { document.getElementById('ov-chart-wrap').style.display='none'; document.getElementById('overview-list').innerHTML=''; return; }
@@ -1378,22 +1541,21 @@ function renderOverview() {
     const pct = maxAmt?(m/maxAmt*100):0;
     return `<div class="bar-item"><div class="bar-val" style="font-size:0.6rem">${fmt(Math.round(m))}</div><div class="bar ${i.isLoan?'loan-bar':''}" style="height:${pct}%"></div><div class="bar-label">${i.name.slice(0,9)}</div></div>`;
   }).join('');
-  const grandTotal = totalMonthly + loanMonthly;
   document.getElementById('overview-list').innerHTML = `<div class="loan-card">
     <h3>Monthly Breakdown</h3>
     ${allItems.map(i=>{
       const m=Math.round(toMonthly(i.amount||0,i.freq));
       const pct=grandTotal?(m/grandTotal*100).toFixed(0):0;
-      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border2)">
-        <span style="display:flex;align-items:center;gap:8px">${ICONS[i.cat]||'📋'} <span>${i.name}</span></span>
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)">
+        <span style="display:flex;align-items:center;gap:8px">${ICONS[i.cat]||'📋'} <span style="font-size:0.9rem">${i.name}</span></span>
         <span style="display:flex;align-items:center;gap:14px">
           <span style="font-size:0.7rem;color:var(--muted)">${pct}%</span>
-          <span style="font-family:Cormorant Garamond,serif;font-size:1.1rem;color:var(--gold-light)">${fmt(m)}</span>
+          <span style="font-family:Cormorant Garamond,serif;font-size:1.1rem;color:var(--blue2)">${fmt(m)}</span>
         </span>
       </div>`;
     }).join('')}
-    <div style="display:flex;justify-content:space-between;padding:14px 0 0;font-family:Cormorant Garamond,serif;font-size:1.4rem;color:var(--cream)">
-      <span>Total / month</span><span style="color:var(--gold)">${fmt(Math.round(grandTotal))}</span>
+    <div style="display:flex;justify-content:space-between;padding:14px 0 0;font-family:Cormorant Garamond,serif;font-size:1.4rem;color:var(--blue)">
+      <span>Total / month</span><span style="color:var(--red)">${fmt(Math.round(grandTotal))}</span>
     </div>
   </div>`;
 }
