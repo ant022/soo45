@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Our Apartment Planner</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --blue: #1a3a6b;
@@ -62,7 +62,7 @@
   }
   #setup-screen.visible { display: flex; }
   #setup-screen h2 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito', sans-serif;
     font-size: 2rem;
     color: var(--blue);
     margin-bottom: 8px;
@@ -107,7 +107,7 @@
     gap: 14px;
   }
   .header-left h1 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito', sans-serif;
     font-size: 2rem;
     font-weight: 400;
     color: white;
@@ -184,7 +184,7 @@
     margin-bottom: 22px; flex-wrap: wrap; gap: 12px;
   }
   .section-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Nunito', sans-serif;
     font-size: 1.7rem; font-weight: 400; color: var(--blue);
   }
   .section-title small {
@@ -208,7 +208,7 @@
     box-shadow: var(--shadow);
   }
   .sum-label { font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-  .sum-value { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 400; color: var(--blue); }
+  .sum-value { font-family: 'Nunito', sans-serif; font-size: 1.7rem; font-weight: 400; color: var(--blue); }
   .sum-value.gold { color: var(--blue2); }
   .sum-value.green { color: var(--green); }
   .sum-value.red { color: var(--red); }
@@ -242,7 +242,7 @@
   }
   .company-logo img { width: 100%; height: 100%; object-fit: contain; }
   .company-logo .initials {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.2rem;
+    font-family: 'Nunito', sans-serif; font-size: 1.2rem;
     color: var(--blue); font-weight: 600;
   }
   .card-name { font-size: 1rem; font-weight: 500; color: var(--blue); }
@@ -253,7 +253,7 @@
     margin-bottom: 8px;
   }
   .price-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
-  .price-value { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--blue2); font-weight: 400; }
+  .price-value { font-family: 'Nunito', sans-serif; font-size: 1.5rem; color: var(--blue2); font-weight: 400; }
   .note-text { font-size: 0.8rem; color: var(--muted); line-height: 1.55; margin-top: 8px; }
   .card-actions {
     display: flex; gap: 8px; align-items: center;
@@ -319,7 +319,7 @@
   }
   @keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
   .modal h2 {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.5rem;
+    font-family: 'Nunito', sans-serif; font-size: 1.5rem;
     font-weight: 400; color: var(--blue); margin-bottom: 20px;
     padding-bottom: 14px; border-bottom: 2px solid var(--red);
   }
@@ -364,7 +364,7 @@
   .expense-info { flex: 1; min-width: 0; }
   .expense-name { font-size: 0.94rem; color: var(--text); font-weight: 500; }
   .expense-cat { font-size: 0.66rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
-  .expense-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--blue2); text-align: right; white-space: nowrap; font-weight: 400; }
+  .expense-amount { font-family: 'Nunito', sans-serif; font-size: 1.4rem; color: var(--blue2); text-align: right; white-space: nowrap; font-weight: 400; }
   .expense-freq { font-size: 0.64rem; color: var(--muted); display: block; text-align: right; }
   .item-actions { display: flex; flex-direction: column; gap: 5px; flex-shrink: 0; }
 
@@ -375,13 +375,13 @@
     box-shadow: var(--shadow);
   }
   .loan-card h3 {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
+    font-family: 'Nunito', sans-serif; font-size: 1.3rem;
     color: var(--blue); margin-bottom: 16px;
     padding-bottom: 12px; border-bottom: 1px solid var(--border);
   }
   .loan-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px; }
   .loan-stat .l-label { font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-  .loan-stat .l-val { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; color: var(--blue2); margin-top: 3px; }
+  .loan-stat .l-val { font-family: 'Nunito', sans-serif; font-size: 1.45rem; color: var(--blue2); margin-top: 3px; }
   .progress-wrap { margin-top: 18px; }
   .progress-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); margin-bottom: 6px; }
   .progress-bar { height: 6px; background: var(--blue-pale); border-radius: 4px; overflow: hidden; }
@@ -393,7 +393,7 @@
     border-radius: 12px; padding: 22px; margin-bottom: 24px;
     box-shadow: var(--shadow);
   }
-  .chart-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--blue); margin-bottom: 16px; }
+  .chart-title { font-family: 'Nunito', sans-serif; font-size: 1.1rem; color: var(--blue); margin-bottom: 16px; }
   .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 120px; }
   .bar-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
   .bar { width: 100%; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, var(--blue-light), var(--blue)); min-height: 3px; transition: height 0.4s ease; }
@@ -442,7 +442,7 @@
     animation: spin 0.7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  #loading p { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--muted); }
+  #loading p { font-family: 'Nunito', sans-serif; font-size: 1.1rem; color: var(--muted); }
 
   /* RESPONSIVE */
   @media (max-width: 640px) {
@@ -560,17 +560,9 @@
         <input type="text" id="o-name" placeholder="e.g. Sofa, Flooring…">
       </div>
       <div class="form-group">
-        <label>Category</label>
-        <select id="o-cat">
-          <option value="furniture">🛋️ Furniture</option>
-          <option value="appliances">🔌 Appliances</option>
-          <option value="renovation">🔨 Renovation</option>
-          <option value="flooring">🏠 Flooring</option>
-          <option value="lighting">💡 Lighting</option>
-          <option value="textiles">🛏️ Textiles</option>
-          <option value="storage">📦 Storage</option>
-          <option value="other">📋 Other</option>
-        </select>
+        <label>Budget Category</label>
+        <select id="o-cat"></select>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:4px">Links this item to a budget above</div>
       </div>
     </div>
     <div class="form-row">
@@ -741,22 +733,41 @@
 
 <!-- ONE-OFF -->
 <div id="tab-oneoff" class="tab-content">
-  <div class="section-header">
-    <div class="section-title">One-off Costs<small>Furniture, renovation, appliances…</small></div>
-    <button class="btn-add edit-only" onclick="openModal('oneoff')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Add Cost
-    </button>
+
+  <!-- BUDGETS SECTION -->
+  <div style="margin-bottom:24px">
+    <div class="section-header" style="margin-bottom:14px">
+      <div class="section-title">Budgets<small>Set limits per category — auto-tracked from items below</small></div>
+      <button class="btn-add edit-only" onclick="openModal('budget')" style="background:var(--blue);border-color:var(--blue)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Budget
+      </button>
+    </div>
+    <div id="budget-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px"></div>
+    <div id="budget-empty" class="empty-state" style="padding:28px 20px">
+      <div class="big-icon" style="font-size:2rem">🎯</div>
+      <p>No budgets yet. Add one to start tracking your spending limits.</p>
+    </div>
   </div>
-  <div class="summary-bar" id="oneoff-summary" style="display:none">
-    <div class="sum-item"><div class="sum-label">Total Budget</div><div class="sum-value gold" id="os-total">—</div></div>
-    <div class="sum-item"><div class="sum-label">Committed / Spent</div><div class="sum-value red" id="os-spent">—</div></div>
-    <div class="sum-item"><div class="sum-label">Remaining</div><div class="sum-value green" id="os-rem">—</div></div>
-  </div>
-  <div class="expense-list" id="oneoff-list"></div>
-  <div id="oneoff-empty" class="empty-state">
-    <div class="big-icon">🏠</div>
-    <p>No one-off costs yet.<br>Track furniture, appliances, renovation and more.</p>
+
+  <div style="border-top:1px solid var(--border);padding-top:24px">
+    <div class="section-header">
+      <div class="section-title">Purchases &amp; Costs<small>Individual items — linked to your budgets above</small></div>
+      <button class="btn-add edit-only" onclick="openModal('oneoff')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Item
+      </button>
+    </div>
+    <div class="summary-bar" id="oneoff-summary" style="display:none">
+      <div class="sum-item"><div class="sum-label">Total Budgeted</div><div class="sum-value gold" id="os-total">—</div></div>
+      <div class="sum-item"><div class="sum-label">Total Spent</div><div class="sum-value red" id="os-spent">—</div></div>
+      <div class="sum-item"><div class="sum-label">Remaining</div><div class="sum-value green" id="os-rem">—</div></div>
+    </div>
+    <div class="expense-list" id="oneoff-list"></div>
+    <div id="oneoff-empty" class="empty-state">
+      <div class="big-icon">🏠</div>
+      <p>No items yet.<br>Add purchases, furniture, appliances and more.</p>
+    </div>
   </div>
 </div>
 
@@ -810,7 +821,7 @@
   <!-- INCOME SECTION -->
   <div class="loan-card" style="margin-bottom:20px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-      <h3 style="margin:0;border:none;padding:0;font-family:Cormorant Garamond,serif;font-size:1.3rem;color:var(--blue)">💰 Monthly Income</h3>
+      <h3 style="margin:0;border:none;padding:0;font-family:'Nunito',sans-serif;font-size:1.3rem;color:var(--blue)">💰 Monthly Income</h3>
       <button class="btn-small btn-edit edit-only" onclick="openModal('income')">Edit</button>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px" id="income-display">
@@ -856,6 +867,30 @@
 </div>
 
 </main>
+
+<!-- BUDGET MODAL -->
+<div class="modal-overlay" id="modal-budget">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('budget')">✕</button>
+    <h2 id="budget-modal-title">Add Budget</h2>
+    <input type="hidden" id="b-edit-id">
+    <div class="form-group">
+      <label>Category Name</label>
+      <input type="text" id="b-name" placeholder="e.g. Furniture, Dog, Kitchen…">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Emoji Icon</label>
+        <input type="text" id="b-icon" placeholder="🛋️" maxlength="4">
+      </div>
+      <div class="form-group">
+        <label>Total Budget (€)</label>
+        <input type="number" id="b-amount" placeholder="5000">
+      </div>
+    </div>
+    <button class="btn-primary" onclick="saveBudget()">Save Budget</button>
+  </div>
+</div>
 
 <!-- INCOME MODAL -->
 <div class="modal-overlay" id="modal-income">
@@ -935,7 +970,7 @@ const sb = {
 // ═══════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════
-let state = { kitchens: [], oneoffs: [], monthly: [], loan: null, income: null };
+let state = { kitchens: [], oneoffs: [], monthly: [], loan: null, income: null, budgets: [] };
 let editMode = false;
 
 // ═══════════════════════════════════════════════════════════
@@ -950,6 +985,12 @@ const ICONS = {
   utilities:'⚡', food:'🛒', transport:'🚗', insurance:'🛡️',
   subscriptions:'📱', health:'❤️', hoamanagement:'🏢', savings:'💰', loan:'🏦'
 };
+
+function getBudgetName(catId) {
+  if (!catId || catId === '__none') return 'Uncategorised';
+  const b = state.budgets.find(x => x.id === catId);
+  return b ? b.icon + ' ' + b.name : catId;
+}
 
 function toast(msg) {
   const el = document.getElementById('toast');
@@ -985,18 +1026,20 @@ function saveSetup() {
 async function init() {
   setDbStatus('', 'Connecting…');
   try {
-    const [kitchens, oneoffs, monthly, loanArr, incomeArr] = await Promise.all([
+    const [kitchens, oneoffs, monthly, loanArr, incomeArr, budgets] = await Promise.all([
       sb.query('kitchens', { order: 'created_at.asc' }),
       sb.query('oneoffs', { order: 'created_at.asc' }),
       sb.query('monthly', { order: 'created_at.asc' }),
       sb.query('loan', { order: 'created_at.desc' }),
-      sb.query('income', { order: 'created_at.desc' })
+      sb.query('income', { order: 'created_at.desc' }),
+      sb.query('budgets', { order: 'created_at.asc' })
     ]);
     state.kitchens = kitchens;
     state.oneoffs = oneoffs;
     state.monthly = monthly;
     state.loan = loanArr && loanArr.length ? loanArr[0] : null;
     state.income = incomeArr && incomeArr.length ? incomeArr[0] : null;
+    state.budgets = budgets;
     setDbStatus('connected', 'Connected');
     renderAll();
   } catch(e) {
@@ -1009,6 +1052,7 @@ async function init() {
 
 function renderAll() {
   renderKitchens();
+  renderBudgets();
   renderOneoff();
   renderLoan();
   renderMonthly();
@@ -1070,6 +1114,19 @@ function openModal(type, id) {
   if (type === 'oneoff') document.getElementById('oneoff-modal-title').textContent = id ? 'Edit Cost' : 'Add One-off Cost';
   if (type === 'monthly') document.getElementById('monthly-modal-title').textContent = id ? 'Edit Expense' : 'Add Monthly Expense';
   if (type === 'income') populateIncomeModal();
+  if (type === 'budget' && id) {
+    const b = state.budgets.find(x=>x.id===id);
+    if (b) {
+      document.getElementById('b-edit-id').value = b.id;
+      document.getElementById('b-name').value = b.name||'';
+      document.getElementById('b-icon').value = b.icon||'';
+      document.getElementById('b-amount').value = b.amount||'';
+      document.getElementById('budget-modal-title').textContent = 'Edit Budget';
+    }
+  } else if (type === 'budget') {
+    document.getElementById('budget-modal-title').textContent = 'Add Budget';
+  }
+  if (type === 'oneoff') populateOneoffCatDropdown(id ? state.oneoffs.find(x=>x.id===id)?.cat : null);
   document.getElementById('modal-' + type).classList.add('open');
   setTimeout(() => { const first = document.querySelector(`#modal-${type} input:not([type=hidden])`); first && first.focus(); }, 100);
 }
@@ -1101,7 +1158,7 @@ function populateModal(type, id) {
     const item = state.oneoffs.find(i => i.id === id); if (!item) return;
     document.getElementById('o-edit-id').value = id;
     document.getElementById('o-name').value = item.name||'';
-    document.getElementById('o-cat').value = item.cat||'other';
+    populateOneoffCatDropdown(item.cat);
     document.getElementById('o-budget').value = item.budget||'';
     document.getElementById('o-actual').value = item.actual||'';
     document.getElementById('o-notes').value = item.notes||'';
@@ -1227,6 +1284,105 @@ function renderKitchens() {
 }
 
 // ═══════════════════════════════════════════════════════════
+// BUDGETS
+// ═══════════════════════════════════════════════════════════
+async function saveBudget() {
+  const editId = document.getElementById('b-edit-id').value;
+  const item = {
+    id: editId || uid(),
+    name: document.getElementById('b-name').value.trim(),
+    icon: document.getElementById('b-icon').value.trim() || '📦',
+    amount: parseFloat(document.getElementById('b-amount').value) || null,
+  };
+  if (!item.name) { alert('Please enter a category name'); return; }
+  setDbStatus('saving','Saving…');
+  try {
+    await sb.upsert('budgets', item);
+    if (editId) state.budgets = state.budgets.map(b => b.id===editId ? item : b);
+    else state.budgets.push(item);
+    setDbStatus('connected','Saved ✓');
+    closeModal('budget');
+    renderBudgets();
+    populateOneoffCatDropdown();
+    toast('Budget saved');
+  } catch(e) { setDbStatus('error','Save failed'); toast('⚠️ Save failed'); console.error(e); }
+}
+
+async function deleteBudget(id) {
+  if (!confirm('Delete this budget? Items linked to it will show as Uncategorised.')) return;
+  setDbStatus('saving','Saving…');
+  try {
+    await sb.delete('budgets', id);
+    state.budgets = state.budgets.filter(b => b.id !== id);
+    setDbStatus('connected','Saved ✓');
+    renderBudgets();
+    populateOneoffCatDropdown();
+    renderOneoff();
+    toast('Budget deleted');
+  } catch(e) { setDbStatus('error','Delete failed'); }
+}
+
+function populateOneoffCatDropdown(selectedId) {
+  const sel = document.getElementById('o-cat');
+  if (!sel) return;
+  const budgets = state.budgets;
+  if (!budgets.length) {
+    sel.innerHTML = '<option value="__none">No budgets yet — add one first</option>';
+    return;
+  }
+  sel.innerHTML = budgets.map(b =>
+    `<option value="${b.id}" ${b.id===selectedId?'selected':''}>${b.icon} ${b.name}</option>`
+  ).join('') + '<option value="__none">📋 Uncategorised</option>';
+}
+
+function renderBudgets() {
+  const budgets = state.budgets;
+  const container = document.getElementById('budget-cards');
+  const empty = document.getElementById('budget-empty');
+  if (!budgets.length) { container.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display = 'none';
+
+  // calc spent per budget from oneoffs
+  const spent = {};
+  state.oneoffs.forEach(item => {
+    const key = item.cat || '__none';
+    spent[key] = (spent[key] || 0) + (item.actual != null ? item.actual : (item.budget || 0));
+  });
+
+  container.innerHTML = budgets.map(b => {
+    const s = spent[b.id] || 0;
+    const total = b.amount || 0;
+    const remaining = total - s;
+    const pct = total > 0 ? Math.min(100, (s / total * 100)) : 0;
+    const overBudget = remaining < 0;
+    const barColor = pct >= 100 ? 'var(--red)' : pct >= 80 ? '#e67e22' : 'var(--blue)';
+    return `<div class="loan-card" style="margin-bottom:0;padding:18px 20px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <div style="font-size:1.4rem;line-height:1">${b.icon}</div>
+          <div style="font-size:0.95rem;font-weight:600;color:var(--blue);margin-top:4px">${b.name}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:1.3rem;font-weight:700;color:var(--blue);font-family:'Nunito',sans-serif">${fmt(total)}</div>
+          <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em">total budget</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:8px">
+        <span style="color:var(--muted)">Spent: <strong style="color:${overBudget?'var(--red)':'var(--text)'}">${fmt(s)}</strong></span>
+        <span style="color:${overBudget?'var(--red)':'var(--green)'};font-weight:600">${overBudget?'Over by '+fmt(Math.abs(remaining)):'Left: '+fmt(remaining)}</span>
+      </div>
+      <div style="height:8px;background:var(--blue-pale);border-radius:4px;overflow:hidden;margin-bottom:12px">
+        <div style="height:100%;width:${pct.toFixed(1)}%;background:${barColor};border-radius:4px;transition:width 0.5s"></div>
+      </div>
+      <div style="display:flex;gap:7px" class="edit-only">
+        <button class="btn-small btn-edit" onclick="openModal('budget','${b.id}')">Edit</button>
+        <button class="btn-small btn-delete" onclick="deleteBudget('${b.id}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
 // ONE-OFF
 // ═══════════════════════════════════════════════════════════
 async function saveOneoff() {
@@ -1246,7 +1402,7 @@ async function saveOneoff() {
     if (editId) state.oneoffs = state.oneoffs.map(i=>i.id===editId?item:i);
     else state.oneoffs.push(item);
     setDbStatus('connected','Saved ✓');
-    closeModal('oneoff'); renderOneoff(); toast('Cost saved');
+    closeModal('oneoff'); renderBudgets(); renderOneoff(); toast('Item saved');
   } catch(e) { setDbStatus('error','Save failed'); toast('⚠️ Save failed'); }
 }
 
@@ -1256,7 +1412,7 @@ async function deleteOneoff(id) {
   try {
     await sb.delete('oneoffs', id);
     state.oneoffs = state.oneoffs.filter(i=>i.id!==id);
-    setDbStatus('connected','Saved ✓'); renderOneoff(); toast('Deleted');
+    setDbStatus('connected','Saved ✓'); renderBudgets(); renderOneoff(); toast('Deleted');
   } catch(e) { setDbStatus('error','Delete failed'); }
 }
 
@@ -1279,7 +1435,7 @@ function renderOneoff() {
       <div class="expense-icon">${ICONS[item.cat]||'📋'}</div>
       <div class="expense-info">
         <div class="expense-name">${item.name}</div>
-        <div class="expense-cat">${item.cat}</div>
+        <div class="expense-cat">${getBudgetName(item.cat)}</div>
         ${item.notes?`<div style="font-size:0.76rem;color:var(--muted);margin-top:3px">${item.notes}</div>`:''}
       </div>
       <div style="text-align:right;min-width:130px">
@@ -1550,11 +1706,11 @@ function renderOverview() {
         <span style="display:flex;align-items:center;gap:8px">${ICONS[i.cat]||'📋'} <span style="font-size:0.9rem">${i.name}</span></span>
         <span style="display:flex;align-items:center;gap:14px">
           <span style="font-size:0.7rem;color:var(--muted)">${pct}%</span>
-          <span style="font-family:Cormorant Garamond,serif;font-size:1.1rem;color:var(--blue2)">${fmt(m)}</span>
+          <span style="font-family:'Nunito',sans-serif;font-size:1.1rem;color:var(--blue2)">${fmt(m)}</span>
         </span>
       </div>`;
     }).join('')}
-    <div style="display:flex;justify-content:space-between;padding:14px 0 0;font-family:Cormorant Garamond,serif;font-size:1.4rem;color:var(--blue)">
+    <div style="display:flex;justify-content:space-between;padding:14px 0 0;font-family:'Nunito',sans-serif;font-size:1.4rem;color:var(--blue)">
       <span>Total / month</span><span style="color:var(--red)">${fmt(Math.round(grandTotal))}</span>
     </div>
   </div>`;
