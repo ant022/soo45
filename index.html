@@ -501,11 +501,156 @@
     #edit-status { display: none; }
   }
 
+
+  /* ── PIN LOCK SCREEN ── */
+  #pin-screen {
+    position: fixed; inset: 0; z-index: 9500;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    opacity: 1; visibility: visible;
+  }
+  #pin-screen.unlocked {
+    opacity: 0; visibility: hidden; pointer-events: none;
+  }
+  #pin-bg {
+    position: absolute; inset: 0;
+    background: var(--bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+  /* faint pattern overlay */
+  #pin-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 20% 20%, rgba(26,58,107,0.08) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 80%, rgba(192,57,43,0.06) 0%, transparent 50%);
+  }
+  #pin-card {
+    position: relative; z-index: 1;
+    background: white;
+    border-radius: 24px;
+    padding: 40px 36px 36px;
+    width: 100%; max-width: 340px;
+    box-shadow: 0 24px 64px rgba(26,58,107,0.18), 0 4px 16px rgba(26,58,107,0.1);
+    border: 1px solid rgba(26,58,107,0.1);
+    text-align: center;
+    animation: pinCardIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes pinCardIn {
+    from { opacity: 0; transform: scale(0.88) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .pin-logo {
+    width: 64px; height: 64px; border-radius: 18px;
+    background: linear-gradient(135deg, var(--blue), var(--blue-light));
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    box-shadow: 0 8px 24px rgba(26,58,107,0.25);
+  }
+  .pin-title {
+    font-size: 1.1rem; font-weight: 700; color: var(--blue);
+    margin-bottom: 4px; letter-spacing: -0.01em;
+  }
+  .pin-subtitle {
+    font-size: 0.78rem; color: var(--muted); margin-bottom: 28px;
+  }
+  /* dot indicators */
+  .pin-dots {
+    display: flex; justify-content: center; gap: 14px;
+    margin-bottom: 28px; height: 16px; align-items: center;
+  }
+  .pin-dot {
+    width: 13px; height: 13px; border-radius: 50%;
+    border: 2px solid var(--border);
+    background: transparent;
+    transition: all 0.15s ease;
+  }
+  .pin-dot.filled {
+    background: var(--blue);
+    border-color: var(--blue);
+    transform: scale(1.1);
+  }
+  .pin-dot.error {
+    background: var(--red);
+    border-color: var(--red);
+    animation: pinShake 0.4s ease;
+  }
+  @keyframes pinShake {
+    0%,100% { transform: translateX(0); }
+    20%      { transform: translateX(-6px); }
+    40%      { transform: translateX(6px); }
+    60%      { transform: translateX(-4px); }
+    80%      { transform: translateX(4px); }
+  }
+  /* numpad */
+  .pin-pad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .pin-key {
+    height: 58px; border-radius: 14px;
+    border: 1.5px solid var(--border);
+    background: var(--off-white);
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.3rem; font-weight: 600;
+    color: var(--blue); cursor: pointer;
+    transition: all 0.12s ease;
+    display: flex; align-items: center; justify-content: center;
+    user-select: none; -webkit-user-select: none;
+  }
+  .pin-key:hover { background: var(--blue-pale); border-color: var(--blue); }
+  .pin-key:active { transform: scale(0.93); background: var(--blue); color: white; }
+  .pin-key.zero { grid-column: 2; }
+  .pin-key.del {
+    background: transparent; border-color: transparent;
+    color: var(--muted); font-size: 1rem;
+  }
+  .pin-key.del:hover { color: var(--red); background: var(--red-pale); border-color: transparent; }
+  .pin-error-msg {
+    font-size: 0.75rem; color: var(--red); margin-top: 14px;
+    height: 18px; transition: opacity 0.2s;
+    opacity: 0;
+  }
+  .pin-error-msg.show { opacity: 1; }
+
   /* hide edit controls when locked */
   body.locked .edit-only { display: none !important; }
 </style>
 </head>
 <body class="locked">
+
+<!-- PIN LOCK SCREEN -->
+<div id="pin-screen">
+  <div id="pin-bg"></div>
+  <div id="pin-card">
+    <div class="pin-logo">🏠</div>
+    <div class="pin-title">Our Apartment</div>
+    <div class="pin-subtitle">Enter PIN to continue</div>
+    <div class="pin-dots">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
+    </div>
+    <div class="pin-pad">
+      <button class="pin-key" onclick="pinPress('1')">1</button>
+      <button class="pin-key" onclick="pinPress('2')">2</button>
+      <button class="pin-key" onclick="pinPress('3')">3</button>
+      <button class="pin-key" onclick="pinPress('4')">4</button>
+      <button class="pin-key" onclick="pinPress('5')">5</button>
+      <button class="pin-key" onclick="pinPress('6')">6</button>
+      <button class="pin-key" onclick="pinPress('7')">7</button>
+      <button class="pin-key" onclick="pinPress('8')">8</button>
+      <button class="pin-key" onclick="pinPress('9')">9</button>
+      <button class="pin-key zero" onclick="pinPress('0')">0</button>
+      <button class="pin-key del" onclick="pinDelete()">⌫</button>
+    </div>
+    <div class="pin-error-msg" id="pin-error-msg">Incorrect PIN. Try again.</div>
+  </div>
+</div>
+
 
 <!-- LOADING -->
 <div id="loading">
@@ -971,6 +1116,73 @@ const EDIT_PASSWORD = '2202';
 
 let SUPABASE_URL = 'https://fsrkkgfkglwcxridednw.supabase.co';
 let SUPABASE_KEY = 'sb_publishable_Roq0oIHh98qKU6VcEgGTrw_bbEbEd16';
+
+
+// ═══════════════════════════════════════════════════════════
+// PIN LOCK
+// ═══════════════════════════════════════════════════════════
+const VIEW_PIN = '2202'; // PIN to view the app (same as edit for now, can differ)
+let pinEntry = '';
+let pinUnlocked = sessionStorage.getItem('pin_unlocked') === '1';
+
+function pinPress(digit) {
+  if (pinEntry.length >= 4) return;
+  pinEntry += digit;
+  updatePinDots();
+  if (pinEntry.length === 4) {
+    setTimeout(checkPin, 120);
+  }
+}
+
+function pinDelete() {
+  pinEntry = pinEntry.slice(0, -1);
+  updatePinDots();
+  // clear error
+  document.getElementById('pin-error-msg').classList.remove('show');
+  document.querySelectorAll('.pin-dot').forEach(d => d.classList.remove('error'));
+}
+
+function updatePinDots() {
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('pd' + i);
+    dot.classList.toggle('filled', i < pinEntry.length);
+    dot.classList.remove('error');
+  }
+}
+
+function checkPin() {
+  if (pinEntry === VIEW_PIN) {
+    // success
+    sessionStorage.setItem('pin_unlocked', '1');
+    document.getElementById('pin-screen').classList.add('unlocked');
+    // also load data now
+    init();
+  } else {
+    // shake & clear
+    document.querySelectorAll('.pin-dot').forEach(d => {
+      d.classList.remove('filled');
+      d.classList.add('error');
+    });
+    document.getElementById('pin-error-msg').classList.add('show');
+    setTimeout(() => {
+      document.querySelectorAll('.pin-dot').forEach(d => d.classList.remove('error', 'filled'));
+      pinEntry = '';
+    }, 600);
+  }
+}
+
+// keyboard support
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('pin-screen').classList.contains('unlocked')) {
+    if (e.key >= '0' && e.key <= '9') pinPress(e.key);
+    if (e.key === 'Backspace') pinDelete();
+  }
+});
+
+// if already unlocked this session, skip PIN
+if (pinUnlocked) {
+  document.getElementById('pin-screen').classList.add('unlocked');
+}
 
 // ═══════════════════════════════════════════════════════════
 // SUPABASE CLIENT (vanilla fetch wrapper)
@@ -1780,9 +1992,9 @@ function renderOverview() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// KICK OFF
+// KICK OFF — init() called after PIN unlock (or immediately if session already verified)
 // ═══════════════════════════════════════════════════════════
-init();
+if (pinUnlocked) init();
 </script>
 </body>
 </html>
